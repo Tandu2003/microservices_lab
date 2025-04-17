@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+  product-service:
+    build: ./product-service
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_URI=mongodb+srv://tandu2003:Tandu%402003@cluster0.ikqm6c6.mongodb.net/sale-app?retryWrites=true&w=majority&appName=Cluster0
+
+  order-service:
+    build: ./order-service
+    ports:
+      - "3002:3002"
+    environment:
+      - MONGO_URI=mongodb+srv://tandu2003:Tandu%402003@cluster0.ikqm6c6.mongodb.net/sale-app?retryWrites=true&w=majority&appName=Cluster0
+
+  customer-service:
+    build: ./customer-service
+    ports:
+      - "3003:3003"
+    environment:
+      - MONGO_URI=mongodb+srv://tandu2003:Tandu%402003@cluster0.ikqm6c6.mongodb.net/sale-app?retryWrites=true&w=majority&appName=Cluster0
+
+  payment-service:
+    build: ./payment-service
+    ports:
+      - "3004:3004"
+    environment:
+      - MONGO_URI=mongodb+srv://tandu2003:Tandu%402003@cluster0.ikqm6c6.mongodb.net/sale-app?retryWrites=true&w=majority&appName=Cluster0
+    depends_on:
+      - order-service
+
+  inventory-service:
+    build: ./inventory-service
+    ports:
+      - "3005:3005"
+    environment:
+      - MONGO_URI=mongodb+srv://tandu2003:Tandu%402003@cluster0.ikqm6c6.mongodb.net/sale-app?retryWrites=true&w=majority&appName=Cluster0
+    depends_on:
+      - product-service
+
+  shipping-service:
+    build: ./shipping-service
+    ports:
+      - "3006:3006"
+    environment:
+      - MONGO_URI=mongodb+srv://tandu2003:Tandu%402003@cluster0.ikqm6c6.mongodb.net/sale-app?retryWrites=true&w=majority&appName=Cluster0
+    depends_on:
+      - order-service
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - product-service
+      - order-service
+      - customer-service
+      - payment-service
+      - inventory-service
+      - shipping-service
